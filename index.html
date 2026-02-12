@@ -124,6 +124,154 @@ h1 { color: #e11d48; margin-bottom: 0.5em; font-size: 1.5em; }
 @keyframes flowerSway { 0%, 100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-0.5vw) rotate(5deg); } }
 @keyframes bounceIn { from { transform: translateY(50vh) scale(0.5); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
 
+/* OUTRO CARD */
+#outro {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  width: 90%;
+  max-width: 560px;
+  padding: 5vw;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 25px 50px rgba(0,0,0,.25);
+  display: none;
+  z-index: 3;
+  border: 0.5vw solid #fb7185;
+  animation: cardZoom 1s ease forwards;
+}
+#outro h2 {
+  color: #e11d48;
+  font-size: 1.3em;
+  margin-bottom: 0.8em;
+}
+#outro p {
+  color: #666;
+  line-height: 1.8;
+  font-size: 0.95em;
+  margin-bottom: 1.5em;
+}
+.outro-buttons {
+  display: flex;
+  gap: 1em;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* EXIT BUTTON */
+.exit-btn {
+  background: #e11d48;
+  color: white;
+  border: none;
+  padding: 0.8em 1.5em;
+  border-radius: 25px;
+  font-size: 1em;
+  cursor: pointer;
+  margin-top: 1em;
+  transition: all 0.3s ease;
+  font-weight: bold;
+}
+.exit-btn:hover {
+  background: #be123c;
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(225, 29, 72, 0.4);
+}
+.exit-btn:active {
+  transform: scale(0.95);
+}
+
+.back-btn {
+  background: #9ca3af;
+  color: white;
+  border: none;
+  padding: 0.8em 1.5em;
+  border-radius: 25px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+}
+.back-btn:hover {
+  background: #6b7280;
+  transform: scale(1.05);
+}
+
+.goodbye-btn {
+  background: #ec4899;
+  color: white;
+  border: none;
+  padding: 0.8em 1.5em;
+  border-radius: 25px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+}
+.goodbye-btn:hover {
+  background: #db2777;
+  transform: scale(1.05);
+}
+
+/* TEMPLATE SELECTOR */
+#template-select {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  width: 90%;
+  max-width: 560px;
+  padding: 5vw;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 25px 50px rgba(0,0,0,.25);
+  display: none;
+  z-index: 4;
+  border: 0.5vw solid #fb7185;
+  animation: cardZoom 1s ease forwards;
+}
+#template-select h2 {
+  color: #e11d48;
+  font-size: 1.3em;
+  margin-bottom: 1em;
+}
+.template-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8em;
+  margin-bottom: 1.5em;
+}
+.template-btn {
+  background: #f3f4f6;
+  color: #333;
+  border: 2px solid #ddd;
+  padding: 1em;
+  border-radius: 12px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+  font-weight: 500;
+}
+.template-btn:hover {
+  background: #e5e7eb;
+  border-color: #e11d48;
+  transform: translateX(5px);
+}
+.template-btn.active {
+  background: #e11d48;
+  color: white;
+  border-color: #e11d48;
+}
+.template-btn small {
+  display: block;
+  font-size: 0.85em;
+  opacity: 0.7;
+  margin-top: 5px;
+}
+
 /* MEDIA QUERIES */
 @media (max-width: 600px) {
   .card { padding: 5vw; }
@@ -179,6 +327,44 @@ h1 { color: #e11d48; margin-bottom: 0.5em; font-size: 1.5em; }
   <div class="names">From Tomtom</div>
   <img src="image.jpg" class="photo">
   <div id="text" class="message"></div>
+  <button class="exit-btn" onclick="exitLove()">Exit ❌</button>
+</div>
+
+<!-- OUTRO -->
+<div id="outro">
+  <h2>Before You Exit... 💕</h2>
+  <p id="outroText">You mean the world to me. Thank you for all the love and laughter you bring to my life. I can't wait to create more beautiful memories with you. Until next time, keep smiling! 🌹</p>
+  <div class="outro-buttons">
+    <button class="back-btn" onclick="goBackToCard()">Back 💭</button>
+    <button class="goodbye-btn" onclick="confirmExit()">Goodbye 👋</button>
+  </div>
+</div>
+
+<!-- TEMPLATE SELECTOR -->
+<div id="template-select">
+  <h2>Choose Your Message 💝</h2>
+  <div class="template-options">
+    <button class="template-btn active" onclick="selectTemplate(0)">
+      🌹 Romantic
+      <small>A heartfelt goodbye message</small>
+    </button>
+    <button class="template-btn" onclick="selectTemplate(1)">
+      💝 Passionate
+      <small>Deep and emotional farewell</small>
+    </button>
+    <button class="template-btn" onclick="selectTemplate(2)">
+      ✨ Sweet
+      <small>Tender and gentle goodbye</small>
+    </button>
+    <button class="template-btn" onclick="selectTemplate(3)">
+      🎭 Playful
+      <small>Fun and light-hearted message</small>
+    </button>
+  </div>
+  <div class="outro-buttons">
+    <button class="back-btn" onclick="goBackToCard()">Back 💭</button>
+    <button class="goodbye-btn" onclick="showOutro()">Continue →</button>
+  </div>
 </div>
 
 <script>
@@ -215,8 +401,40 @@ Every moment with you feels like magic, and my love for you grows deeper with ea
 You make the world brighter, warmer, and more beautiful just by being in it. 
 Happy Valentine’s Day ❤️ I adore you endlessly.`;
 
-let i=0;
-function type(){
+let i=0;let selectedTemplate=0;
+
+const templates=[
+  {
+    title: 'Before You Exit... 💕',
+    text: 'You mean the world to me. Thank you for all the love and laughter you bring to my life. I can\'t wait to create more beautiful memories with you. Until next time, keep smiling! 🌹'
+  },
+  {
+    title: 'My Dearest... ❤️',
+    text: 'Your love has transformed my life in ways I never imagined possible. Every heartbeat is a reminder of how deeply I adore you. You are my soulmate, my home, and my forever. I love you endlessly. 💕'
+  },
+  {
+    title: 'Sweet Love... 🌸',
+    text: 'With you, I\'ve found my greatest joy and my truest love. Thank you for being the reason I smile every single day. You make life beautiful just by being in it. All my love to you. 💖'
+  },
+  {
+    title: 'Hey Shamsham! 😘',
+    text: 'You make me laugh, you make me happy, and you make every day an adventure! So grab a hug because this is from me to you. Thanks for being amazing! Can\'t wait to see you again! 🎉❤️'
+  }
+];
+
+function selectTemplate(index){
+  selectedTemplate=index;
+  document.querySelectorAll('.template-btn').forEach((btn,i)=>{
+    btn.classList.toggle('active',i===index);
+  });
+}
+
+function showOutro(){
+  document.getElementById('template-select').style.display='none';
+  outro.style.display='block';
+  document.getElementById('outroText').innerText=templates[selectedTemplate].text;
+  document.querySelector('#outro h2').innerText=templates[selectedTemplate].title;
+}function type(){
  if(i<msg.length){ text.innerHTML+=msg[i]; i++; setTimeout(type,35); }
  else { launchHearts(); }
 }
@@ -227,6 +445,30 @@ function startLove(){
  card.style.display='block';
  music.play();
  type();
+}
+
+// EXIT FUNCTION - SHOW TEMPLATE SELECTOR
+function exitLove(){
+ card.style.display='none';
+ document.getElementById('template-select').style.display='block';
+}
+
+// GO BACK TO CARD
+function goBackToCard(){
+ outro.style.display='none';
+ document.getElementById('template-select').style.display='none';
+ card.style.display='block';
+}
+
+// CONFIRM EXIT
+function confirmExit(){
+ outro.style.display='none';
+ document.getElementById('template-select').style.display='none';
+ intro.style.display='flex';
+ music.pause();
+ music.currentTime=0;
+ text.innerHTML='';
+ i=0;
 }
 </script>
 </body>
