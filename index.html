@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine Surprise for Shamsham ❤️</title>
+
+<style>
+/* BODY AND BACKGROUND */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg,#ffdde1,#ee9ca7);
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* INTRO SCREEN */
+#intro {
+  position: fixed;
+  inset: 0;
+  background: #ffdde1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  cursor: pointer;
+}
+#intro h1 {
+  color: #e11d48;
+  text-align: center;
+  font-size: 1.8em;
+}
+.envelope {
+  font-size: 8vw;
+  animation: bounce 1.5s infinite;
+}
+@keyframes bounce { 50% { transform: translateY(-20px); } }
+
+/* CARD */
+.card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  width: 90%;
+  max-width: 560px;
+  padding: 5vw;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 25px 50px rgba(0,0,0,.25);
+  display: none;
+  z-index: 2;
+  border: 0.5vw solid #fb7185;
+  animation: cardZoom 1s ease forwards;
+}
+@keyframes cardZoom { from { transform: translate(-50%, -50%) scale(0.9); } to { transform: translate(-50%, -50%) scale(1); } }
+
+h1 { color: #e11d48; margin-bottom: 0.5em; font-size: 1.5em; }
+.names { font-size: 1em; color: #be123c; margin-bottom: 1em; }
+.message { margin-top: 1em; line-height: 1.7; color: #444; min-height: 10em; font-size: 1em; }
+
+.photo {
+  width: 50%;
+  max-width: 180px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 0.3vw solid #fb7185;
+  margin: 1em 0;
+  box-shadow: 0 10px 25px rgba(0,0,0,.25);
+  animation: photoGlow 2s infinite alternate;
+}
+@keyframes photoGlow { from { box-shadow: 0 0 20px #fb7185; } to { box-shadow: 0 0 40px #f43f5e; } }
+
+/* BLOOMING FLOWERS */
+.flower { position: absolute; bottom: -15vh; width: 15vw; height: 15vw; animation: grow 60s linear forwards; }
+.petal { position: absolute; width: 4vw; height: 6vw; background: #fb7185; border-radius: 50% 50% 0 0; left: 35%; top: 20%; opacity: 0; animation: bloom 4s forwards; }
+.petal:nth-child(1) { transform: rotate(0deg); animation-delay: 2s; }
+.petal:nth-child(2) { transform: rotate(60deg); animation-delay: 3s; }
+.petal:nth-child(3) { transform: rotate(120deg); animation-delay: 4s; }
+.petal:nth-child(4) { transform: rotate(180deg); animation-delay: 5s; }
+.petal:nth-child(5) { transform: rotate(240deg); animation-delay: 6s; }
+.petal:nth-child(6) { transform: rotate(300deg); animation-delay: 7s; }
+.center { position: absolute; width: 3vw; height: 3vw; background: #fde047; border-radius: 50%; top: 35%; left: 35%; opacity: 0; animation: showCenter 2s forwards; animation-delay: 8s; }
+@keyframes bloom { to { opacity:1; transform: scale(1); } }
+@keyframes showCenter { to { opacity:1; } }
+@keyframes grow { to { transform: translateY(-90vh) scale(1.3); } }
+
+/* FALLING ROSES */
+.rose { position: absolute; top: -5vh; font-size: 4vw; animation: fall linear infinite; }
+@keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+
+/* FLOATING HEARTS */
+.heart { position: absolute; font-size: 4vw; opacity: 0.7; animation: floatHeart 5s linear infinite; }
+@keyframes floatHeart { to { transform: translateY(-100vh); opacity: 0; } }
+
+/* SPARKLES */
+.sparkle { position: absolute; width: 0.5vw; height: 0.5vw; background: #fde047; border-radius: 50%; opacity: 0.8; animation: sparkleAnim 4s linear infinite; }
+@keyframes sparkleAnim { 50% { transform: scale(2); opacity: 0.4; } 100% { transform: translateY(-100vh); opacity:0; } }
+
+/* FLOWER BOUQUET */
+.bouquet { position: absolute; bottom: 5vh; right: 5vw; width: 20vw; max-width: 200px; height: 40vh; max-height: 400px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; animation: bounceIn 1.5s ease forwards; }
+.bouquet-stem { width: 2vw; height: 25vh; background: linear-gradient(90deg, #2d5016, #3d7527); border-radius: 10px 10px 0 0; position: relative; }
+.bouquet-stems { position: absolute; width: 100%; height: 100%; }
+.stem { position: absolute; width: 0.5vw; height: 20vh; background: #2d5016; border-radius: 50%; transform-origin: top; }
+.stem:nth-child(1) { left: 0; transform: rotate(-15deg); }
+.stem:nth-child(2) { left: 2.5vw; transform: rotate(15deg); }
+.stem:nth-child(3) { left: 1.25vw; }
+.flowers { position: relative; width: 18vw; height: 18vw; max-width: 180px; max-height: 180px; }
+.flower-head { font-size: 4vw; position: absolute; animation: flowerSway 3s ease-in-out infinite; }
+.flower-head:nth-child(1) { top: -2vw; left: 2vw; animation-delay: 0s; }
+.flower-head:nth-child(2) { top: 1vw; left: 6vw; animation-delay: 0.3s; }
+.flower-head:nth-child(3) { top: 0vw; left: 0vw; animation-delay: 0.6s; }
+.flower-head:nth-child(4) { top: 3vw; left: 10vw; animation-delay: 0.9s; }
+.flower-head:nth-child(5) { top: 5vw; left: 4vw; animation-delay: 1.2s; }
+.flower-head:nth-child(6) { top: 6vw; left: 8vw; animation-delay: 1.5s; }
+.ribbon { position: absolute; bottom: -2vw; left: 50%; transform: translateX(-50%); width: 80%; height: 3vw; background: linear-gradient(90deg, #ff69b4, #ff1493, #ff69b4); border-radius: 50%; opacity: 0.8; }
+@keyframes flowerSway { 0%, 100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-0.5vw) rotate(5deg); } }
+@keyframes bounceIn { from { transform: translateY(50vh) scale(0.5); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+
+/* MEDIA QUERIES */
+@media (max-width: 600px) {
+  .card { padding: 5vw; }
+  h1 { font-size: 1.2em; }
+  .names, .message { font-size: 0.9em; }
+  .photo { max-width: 35vw; }
+  .flower { width: 25vw; height: 25vw; }
+  .petal { width: 6vw; height: 8vw; }
+  .center { width: 4vw; height: 4vw; }
+}
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div id="intro" onclick="startLove()">
+  <div class="envelope">💌</div>
+  <h1>Tap to Open Your Valentine Surprise</h1>
+</div>
+
+<!-- MUSIC -->
+<audio id="music" loop>
+  <source src="Audio.mp3" type="audio/mp3">
+</audio>
+
+<!-- BLOOMING FLOWERS -->
+<div class="flower" style="left:10%"><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="center"></div></div>
+<div class="flower" style="left:80%; animation-delay:10s"><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="center"></div></div>
+
+<!-- FLOWER BOUQUET -->
+<div class="bouquet">
+  <div class="flowers">
+    <div class="flower-head">🌹</div>
+    <div class="flower-head">🌸</div>
+    <div class="flower-head">🌺</div>
+    <div class="flower-head">🌻</div>
+    <div class="flower-head">🌷</div>
+    <div class="flower-head">🌹</div>
+  </div>
+  <div class="bouquet-stem">
+    <div class="bouquet-stems">
+      <div class="stem"></div>
+      <div class="stem"></div>
+      <div class="stem"></div>
+    </div>
+  </div>
+  <div class="ribbon"></div>
+</div>
+
+<!-- CARD -->
+<div class="card" id="card">
+  <h1>Happy Valentine’s Day Shamsham ❤️</h1>
+  <div class="names">From Tomtom</div>
+  <img src="image.jpg" class="photo">
+  <div id="text" class="message"></div>
+</div>
+
+<script>
+// FALLING ROSES
+for(let i=0;i<25;i++){
+ let r=document.createElement('div'); r.className='rose'; r.innerHTML='🌹';
+ r.style.left=Math.random()*100+'vw';
+ r.style.animationDuration=(6+Math.random()*6)+'s';
+ r.style.fontSize=(20+Math.random()*30)+'px';
+ document.body.appendChild(r);
+}
+
+// SPARKLES
+for(let i=0;i<30;i++){
+ let s=document.createElement('div'); s.className='sparkle';
+ s.style.left=Math.random()*100+'vw'; s.style.top=Math.random()*100+'vh';
+ document.body.appendChild(s);
+}
+
+// FLOATING HEARTS
+function launchHearts(){
+ for(let i=0;i<40;i++){
+  let h=document.createElement('div'); h.className='heart'; h.innerHTML='❤️';
+  h.style.left=Math.random()*100+'vw'; h.style.top='100vh';
+  h.style.fontSize=(20+Math.random()*30)+'px';
+  document.body.appendChild(h);
+  setTimeout(()=>{ h.remove(); }, 5000);
+ }
+}
+
+// ROMANTIC MESSAGE
+const msg=`To Shamsham, you are the light in my life, the joy in my heart, and the reason I smile every day. 
+Every moment with you feels like magic, and my love for you grows deeper with each passing day.
+You make the world brighter, warmer, and more beautiful just by being in it. 
+Happy Valentine’s Day ❤️ I adore you endlessly.`;
+
+let i=0;
+function type(){
+ if(i<msg.length){ text.innerHTML+=msg[i]; i++; setTimeout(type,35); }
+ else { launchHearts(); }
+}
+
+// START ANIMATION
+function startLove(){
+ intro.style.display='none';
+ card.style.display='block';
+ music.play();
+ type();
+}
+</script>
+</body>
+</html>
