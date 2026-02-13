@@ -11,6 +11,8 @@ body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
   background: linear-gradient(135deg,#ffdde1,#ee9ca7);
+  /* logical property for block size (better for different writing modes) */
+  block-size: 100vh;
   height: 100vh;
   overflow: hidden;
   display: flex;
@@ -92,6 +94,38 @@ h1 { color: #e11d48; margin-bottom: 0.5em; font-size: 1.5em; }
 @keyframes showCenter { to { opacity:1; } }
 @keyframes grow { to { transform: translateY(-90vh) scale(1.3); } }
 
+/* INTRO: live blooming flowers while the intro is visible */
+#intro .intro-wrap{position:relative;display:flex;flex-direction:column;align-items:center;gap:0.8rem;z-index:18;padding:4vmin 6vmin;max-width:820px;width:100%;box-sizing:border-box;min-height:56vh;justify-content:center}
+#intro { overflow: hidden; }
+.intro-veil{position:absolute;inset:0;background:radial-gradient(ellipse at center, rgba(255,255,255,0.18) 0%, rgba(255,245,250,0.6) 30%, rgba(255,230,240,0.1) 60%, rgba(0,0,0,0.08) 100%);pointer-events:none}
+.intro-vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center, rgba(0,0,0,0.0) 40%, rgba(0,0,0,0.22) 100%)}
+.intro-flowers { position: absolute; inset: 0; pointer-events: none; z-index:6 }
+.intro-flower { position: absolute; bottom: 10%; width: 8vmin; height: 8vmin; transform-origin: 50% 70%; opacity: 0; }
+.intro-petal { position: absolute; left: 50%; top: 50%; width: 3vmin; height: 4vmin; background: #ff6b96; border-radius: 50% 50% 40% 40%; transform-origin: bottom center; opacity: 0; }
+.intro-center { position: absolute; left: 50%; top: 50%; width: 1.6vmin; height: 1.6vmin; background: #ffd166; border-radius: 50%; transform: translate(-50%,-50%); opacity: 0; }
+@keyframes introBloom {
+  0% { transform: scale(0.05) translateY(0); opacity: 0; }
+  60% { transform: scale(1.05) translateY(-6vmin); opacity: 1; }
+  100% { transform: scale(1) translateY(-10vmin); opacity: 0.95; }
+}
+@keyframes petalOpen { to { opacity: 1; transform: translateX(-50%) rotate(0deg) scale(1); } }
+@keyframes petalFloat { to { transform: translateX(-50%) rotate(20deg) translateY(-6vmin); opacity: 0; } }
+
+/* ENVELOPE SHIMMER */
+.envelope{position:relative;display:inline-block;z-index:30;font-size:10vmin;margin-bottom:0.25rem}
+.envelope::after{content:'';position:absolute;left:-40%;top:-40%;width:180%;height:180%;background:linear-gradient(120deg, rgba(255,255,255,0.0) 0%, rgba(255,255,255,0.7) 50%, rgba(255,255,255,0.0) 100%);transform:translateX(-100%) rotate(8deg);opacity:0.7;pointer-events:none;z-index:-1}
+@keyframes shimmer{0%{transform:translateX(-100%) rotate(8deg)}100%{transform:translateX(100%) rotate(8deg)}}
+.envelope:hover::after{animation:shimmer 1.6s ease-in-out}
+
+/* INTRO TITLES */
+.intro-title{font-family:'Brush Script MT','Lucida Handwriting',cursive;color:#b91c4a;font-size:3rem;margin-top:0.25rem;text-shadow:0 8px 28px rgba(185,28,74,0.16);letter-spacing:0.6px;position:relative;z-index:28}
+.intro-sub{font-family:Segoe UI, system-ui, -apple-system, 'Helvetica Neue', Arial;color:#7f1d3a;font-size:1rem;margin-top:0.15rem;opacity:0.95;position:relative;z-index:28}
+
+/* SOFT FLOATING HEARTS (intro only) */
+.intro-heart{position:absolute;font-size:1.05rem;opacity:0.9;pointer-events:none;transform:translateY(0);transition:transform 3s linear, opacity 3s linear}
+.intro-cta{margin-top:0.8rem;padding:0.5rem 1.1rem;border-radius:999px;background:linear-gradient(90deg,#ff6b96,#ff4d85);color:white;font-weight:700;box-shadow:0 8px 28px rgba(255,77,133,0.18)}
+
+
 /* FALLING ROSES */
 .rose { position: absolute; top: -5vh; font-size: 4vw; animation: fall linear infinite; }
 @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
@@ -159,6 +193,14 @@ h1 { color: #e11d48; margin-bottom: 0.5em; font-size: 1.5em; }
   justify-content: center;
   flex-wrap: wrap;
 }
+
+/* OUTRO GAME */
+.game-area{margin-top:1em;background:linear-gradient(180deg, #fffafc, #fff2f6);border:1px solid #ffe4ed;border-radius:12px;padding:1rem;display:flex;flex-direction:column;align-items:center;gap:0.8rem}
+.game-playfield{position:relative;width:100%;max-width:420px;height:220px;border-radius:10px;overflow:hidden;background:linear-gradient(180deg,#fff,#fff3f6);box-shadow:inset 0 6px 18px rgba(235,87,132,0.04)}
+.game-controls{display:flex;gap:0.6rem;align-items:center}
+.game-score{font-weight:700;color:#b91c4a}
+.game-heart{position:absolute;font-size:1.4rem;cursor:pointer;transform:translateY(0);transition:transform 600ms cubic-bezier(.2,.9,.3,1),opacity 600ms}
+.game-final{padding:0.6rem 0.8rem;border-radius:10px;background:#fff;box-shadow:0 6px 18px rgba(0,0,0,0.06);display:flex;gap:0.6rem;align-items:center}
 
 /* EXIT BUTTON */
 .exit-btn {
@@ -282,14 +324,83 @@ h1 { color: #e11d48; margin-bottom: 0.5em; font-size: 1.5em; }
   .petal { width: 6vw; height: 8vw; }
   .center { width: 4vw; height: 4vw; }
 }
+
+/* TEMPLATE PREVIEW IN INTRO */
+.template-preview { position:relative; margin-top:2.2rem; width: min(48vw,420px); padding: 1rem; border-radius: 14px; background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,245,250,0.85)); box-shadow: 0 10px 30px rgba(0,0,0,0.12); display:flex; gap:0.8rem; align-items:center; justify-content:space-between; pointer-events:auto; cursor:pointer; backdrop-filter: blur(6px); z-index:12 }
+.preview-left { display:flex; gap:0.8rem; align-items:center; }
+.preview-icon { font-size:2.2rem; transform-origin:center; animation: previewPulse 2s ease-in-out infinite; }
+.preview-text { font-size:0.95rem; color:#9f1239; font-weight:600; }
+.preview-sub { font-size:0.78rem; color:#6b7280; font-weight:500; opacity:0.95; }
+.preview-open { background: #ff6b96; color: white; border-radius: 999px; padding: 0.45rem 0.9rem; font-weight:700; box-shadow: 0 6px 18px rgba(255,107,150,0.28); transform-origin:center; transition: transform .12s ease; }
+.template-preview:hover .preview-open { transform: scale(1.06); }
+.envelope, .preview-open { cursor: pointer; }
+@keyframes previewPulse { 0%,100%{ transform: scale(1); } 50%{ transform: scale(1.12) rotate(-6deg); } }
+.preview-confetti { position:absolute; inset:0; pointer-events:none; overflow:visible; }
+.confetti-piece { position:absolute; width:0.7rem; height:0.7rem; border-radius:50%; opacity:0.95; }
+.error-overlay{position:fixed;left:10px;right:10px;bottom:10px;background:rgba(0,0,0,0.75);color:#fff;padding:10px;border-radius:8px;font-family:Segoe UI,system-ui,Arial, sans-serif;z-index:10000;display:none;max-height:40vh;overflow:auto}
+.error-overlay h4{margin:0 0 6px 0;font-size:13px}
+.error-overlay pre{white-space:pre-wrap;font-size:12px;color:#ffdede;margin:0}
+
+/* PRICE REVEAL PAGE */
+#price-reveal{position:fixed;inset:0;background:linear-gradient(135deg,#ff6b9d 0%,#ee9ca7 50%,#ffdde1 100%);display:none;z-index:9998;justify-content:center;align-items:center;flex-direction:column;padding:2rem;overflow:hidden}
+#price-reveal::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 50%, rgba(255,255,255,.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(255,255,255,.08) 0%, transparent 50%);pointer-events:none}
+#price-reveal.show{display:flex}
+.price-container{position:relative;z-index:10}
+.price-box{background:linear-gradient(180deg, #ffffff 0%, #fff5f8 100%);border-radius:28px;padding:4rem 3rem;text-align:center;box-shadow:0 40px 100px rgba(225,29,72,.25), 0 15px 50px rgba(0,0,0,.1), inset 0 1px 0 rgba(255,255,255,.8);animation:priceGrow 900ms cubic-bezier(.13,.66,.33,1) forwards;backdrop-filter:blur(10px);border:2px solid rgba(255,255,255,.6);max-width:580px;width:90%;position:relative}
+.price-box::before{content:'';position:absolute;inset:-2px;border-radius:28px;background:linear-gradient(135deg, #ff69b4, #ff1493, #ff69b4, #ff6b96);opacity:0;animation:priceGlow 3s ease-in-out infinite;pointer-events:none}
+.price-icon{font-size:6rem;margin-bottom:1.8rem;animation:priceFloat 2.8s ease-in-out infinite;display:inline-block;filter:drop-shadow(0 8px 16px rgba(225,29,72,.3))}
+.price-title{font-size:2.4rem;color:#b91c4a;font-weight:800;margin-bottom:0.8rem;text-shadow:0 6px 20px rgba(185,28,74,.2);letter-spacing:-0.5px}
+.price-subtitle{font-size:1rem;color:#e11d48;font-weight:500;margin-bottom:1.6rem;opacity:0.9;letter-spacing:1px;text-transform:uppercase}
+.price-text{font-size:1.5rem;color:#b91c4a;font-weight:700;margin-bottom:2.5rem;line-height:1.8;background:linear-gradient(135deg, #ff6b96, #e11d48);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.price-btn{background:linear-gradient(135deg,#ff6b96,#ff1493);color:white;border:none;padding:1.2rem 3rem;font-size:1.1rem;font-weight:800;border-radius:999px;cursor:pointer;transition:all 300ms cubic-bezier(.25,.46,.45,.94);box-shadow:0 12px 35px rgba(255,26,147,.35);position:relative;overflow:hidden;letter-spacing:0.5px}
+.price-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(120deg, transparent, rgba(255,255,255,.3), transparent);transform:translateX(-100%);animation:shine 2s infinite}
+.price-btn:hover{transform:translateY(-3px) scale(1.08);box-shadow:0 18px 50px rgba(255,26,147,.5)}
+.price-btn:active{transform:translateY(-1px)}
+
+/* DECORATIVE STARS */
+.price-star{position:absolute;font-size:1.2rem;opacity:0;animation:starTwinkle 3s ease-in-out infinite}
+.price-star:nth-child(1){top:15%;left:10%;animation-delay:0s}
+.price-star:nth-child(2){top:20%;right:12%;animation-delay:0.6s}
+.price-star:nth-child(3){bottom:20%;left:8%;animation-delay:1.2s}
+.price-star:nth-child(4){bottom:15%;right:10%;animation-delay:1.8s}
+.price-heart{position:absolute;font-size:1.3rem;opacity:0.6;animation:heartFloat 4s ease-in-out infinite}
+.price-heart:nth-child(5){top:25%;right:15%;animation-delay:0s}
+.price-heart:nth-child(6){bottom:25%;left:5%;animation-delay:1s}
+.price-heart:nth-child(7){top:60%;right:5%;animation-delay:2s}
+
+@keyframes priceGrow{from{opacity:0;transform:scale(0.5) rotate(-5deg)}to{opacity:1;transform:scale(1) rotate(0deg)}}
+@keyframes priceFloat{0%,100%{transform:translateY(0) rotateZ(0deg)}50%{transform:translateY(-16px) rotateZ(8deg)}}
+@keyframes priceGlow{0%,100%{opacity:0}50%{opacity:0.6}}
+@keyframes starTwinkle{0%,100%{opacity:0}50%{opacity:0.8}}
+@keyframes heartFloat{0%{opacity:0;transform:translateY(20px)}50%{opacity:0.8;transform:translateY(-20px)}100%{opacity:0;transform:translateY(-40px)}}
+@keyframes shine{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
 </style>
 </head>
 <body>
 
 <!-- INTRO -->
-<div id="intro" onclick="startLove()">
-  <div class="envelope">💌</div>
-  <h1>Tap to Open Your Valentine Surprise</h1>
+<div id="intro">
+  <div class="intro-wrap">
+    <div class="intro-veil" aria-hidden="true"></div>
+    <div class="intro-vignette" aria-hidden="true"></div>
+    <div class="envelope">💌</div>
+    <div class="intro-title">For Shamsham</div>
+    <h1>Tap to Open Your Valentine Surprise</h1>
+    <div class="intro-sub">A little world of love, just for you ✨</div>
+    <div class="intro-flowers" aria-hidden="true"></div>
+    <div class="template-preview" title="Preview: Blooming Hearts (click to open)">
+      <div class="preview-left">
+        <div class="preview-icon">🌸</div>
+        <div>
+          <div class="preview-text">Blooming Hearts</div>
+          <div class="preview-sub">A sparkling surprise inside — tap to open</div>
+        </div>
+      </div>
+      <div class="preview-open">Open →</div>
+      <div class="preview-confetti" aria-hidden="true"></div>
+    </div>
+    <div style="height:6vh"></div>
+  </div>
 </div>
 
 <!-- MUSIC -->
@@ -338,6 +449,54 @@ h1 { color: #e11d48; margin-bottom: 0.5em; font-size: 1.5em; }
     <button class="back-btn" onclick="goBackToCard()">Back 💭</button>
     <button class="goodbye-btn" onclick="confirmExit()">Goodbye 👋</button>
   </div>
+
+  <!-- OUTRO: MINI-GAME (inside outro card) -->
+  <div id="outro-game" style="display:none;margin-top:1rem;">
+    <div class="game-area">
+      <div style="display:flex;align-items:center;gap:0.8rem;justify-content:center;width:100%">
+        <div class="game-score">Score: <span id="gameScore">0</span></div>
+        <div id="gameTimer">Time: 20s</div>
+        <div style="flex:1"></div>
+        <button id="startGameBtn" class="back-btn">Start Game 🎮</button>
+        <button id="stopGameBtn" class="goodbye-btn" style="display:none">Stop</button>
+      </div>
+      <div class="game-playfield" id="gamePlayfield" aria-hidden="true"></div>
+      <div id="gameResult" style="display:none" class="game-final">You scored <strong id="finalScore">0</strong> — <button class="back-btn" id="playAgainBtn">Play Again</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- PRICE REVEAL PAGE -->
+<div id="price-reveal">
+	<div class="price-star">✨</div>
+	<div class="price-star">⭐</div>
+	<div class="price-star">✨</div>
+	<div class="price-star">⭐</div>
+	<div class="price-heart">💕</div>
+	<div class="price-heart">💗</div>
+	<div class="price-heart">💕</div>
+	<div class="price-container">
+		<div id="price-claim-wrapper" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem">
+			<!-- CLAIM GAME VIEW -->
+			<div id="price-claim-game" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem">
+				<div style="font-size:2rem;font-weight:800;color:white;text-shadow:0 4px 12px rgba(0,0,0,.3)">Claim Your Prize!</div>
+				<div style="font-size:1.1rem;color:rgba(255,255,255,.9);font-weight:600">Progress: <span id="priceClaimPercent">0</span>%</div>
+				<div style="width:280px;height:24px;background:rgba(255,255,255,.2);border-radius:12px;overflow:hidden;border:2px solid white;box-shadow:0 4px 12px rgba(0,0,0,.2)">
+					<div id="priceClaimBar" style="width:0%;height:100%;background:linear-gradient(90deg,#ff6b96,#ff1493);transition:width 200ms ease"></div>
+				</div>
+				<button id="priceClaimBtn" style="padding:1.2rem 2.5rem;font-size:1.3rem;font-weight:800;background:linear-gradient(135deg,#ff6b96,#ff1493);color:white;border:none;border-radius:15px;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,.3);transition:all 200ms;margin-top:1rem" onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'" onclick="priceClaimClick()">💝 CLAIM NOW 💝</button>
+			</div>
+			<!-- PRIZE REVEALED VIEW -->
+			<div id="price-claim-reveal" style="display:none;text-align:center">
+				<div class="price-box">
+					<div class="price-icon">💎</div>
+					<div class="price-title">Your Prize! 💖</div>
+					<div class="price-text">ILOVEYOUU MY LOVE!</div>
+					<button class="price-btn" onclick="closePriceReveal()">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 <!-- TEMPLATE SELECTOR -->
@@ -368,6 +527,22 @@ h1 { color: #e11d48; margin-bottom: 0.5em; font-size: 1.5em; }
 </div>
 
 <script>
+// Defensive element bindings and runtime error overlay
+const intro = document.getElementById('intro');
+const card = document.getElementById('card');
+const outro = document.getElementById('outro');
+const templateSelect = document.getElementById('template-select');
+const text = document.getElementById('text');
+const music = document.getElementById('music');
+
+// create an on-screen error panel so you can see runtime errors without opening devtools
+const _err = document.createElement('div'); _err.className='error-overlay'; _err.id='__errorOverlay';
+_err.innerHTML = '<h4>Runtime errors</h4><pre id="__errorText"></pre>';
+document.body.appendChild(_err);
+function showError(msg){ try{ document.getElementById('__errorText').textContent = String(msg); _err.style.display='block'; }catch(e){ console.error(msg); } }
+window.addEventListener('error', e=>{ showError(e.message + '\nat ' + (e.filename||'') + ':' + (e.lineno||'') + ':' + (e.colno||'')); });
+window.addEventListener('unhandledrejection', ev=>{ showError('Unhandled Rejection: ' + (ev.reason && ev.reason.stack ? ev.reason.stack : String(ev.reason))); });
+
 // FALLING ROSES
 for(let i=0;i<25;i++){
  let r=document.createElement('div'); r.className='rose'; r.innerHTML='🌹';
@@ -383,6 +558,101 @@ for(let i=0;i<30;i++){
  s.style.left=Math.random()*100+'vw'; s.style.top=Math.random()*100+'vh';
  document.body.appendChild(s);
 }
+
+// INTRO: live blooming flowers while the intro screen is visible
+let introFlowerInterval;
+function spawnIntroFlower(){
+  const container=document.querySelector('.intro-flowers');
+  if(!container) return;
+  const f=document.createElement('div'); f.className='intro-flower';
+  const left = 8 + Math.random()*84; // keep inside edges
+  f.style.left = left+'vw';
+  const petals = 5 + Math.floor(Math.random()*3);
+  for(let p=0;p<petals;p++){
+    const pet=document.createElement('div'); pet.className='intro-petal';
+    const angle = (360/petals)*p + (Math.random()*10-5);
+    pet.style.transform = `translateX(-50%) rotate(${angle}deg) scale(0.2)`;
+    pet.style.animation = `petalOpen 700ms ease ${p*80}ms forwards, petalFloat ${1800 + Math.random()*1200}ms linear ${800 + p*60}ms forwards`;
+    f.appendChild(pet);
+  }
+  const c=document.createElement('div'); c.className='intro-center';
+  c.style.animation = 'introBloom 900ms ease forwards';
+  f.appendChild(c);
+  f.style.animation = 'introBloom 2200ms ease forwards';
+  container.appendChild(f);
+  // remove after animation
+  setTimeout(()=>{ f.remove(); }, 3800);
+}
+function startIntroFlowers(){
+  stopIntroFlowers();
+  spawnIntroFlower();
+  introFlowerInterval = setInterval(spawnIntroFlower, 800 + Math.random()*600);
+}
+function stopIntroFlowers(){
+  if(introFlowerInterval) { clearInterval(introFlowerInterval); introFlowerInterval=null; }
+  document.querySelectorAll('.intro-flowers .intro-flower').forEach(n=>n.remove());
+}
+
+// start while intro is visible
+startIntroFlowers();
+
+// TEMPLATE PREVIEW: confetti burst and control
+let previewConfettiInterval;
+function spawnPreviewConfetti(){
+  const container = document.querySelector('.preview-confetti');
+  if(!container) return;
+  const count = 10 + Math.floor(Math.random()*6);
+  const colors = ['#ff6b96','#ffd166','#ffb4c6','#f472b6','#fb7185'];
+  for(let i=0;i<count;i++){
+    const c=document.createElement('div'); c.className='confetti-piece';
+    const size = 6 + Math.random()*10;
+    c.style.width = size+'px'; c.style.height = size+'px';
+    c.style.background = colors[Math.floor(Math.random()*colors.length)];
+    c.style.left = (40 + Math.random()*20) + '%';
+    c.style.top = (30 + Math.random()*20) + '%';
+    c.style.opacity = 1;
+    const angle = -80 + Math.random()*160;
+    const dist = 40 + Math.random()*40;
+    c.style.transition = `transform ${900+Math.random()*800}ms cubic-bezier(.2,.8,.2,1), opacity 900ms linear`;
+    container.appendChild(c);
+    // trigger motion
+    requestAnimationFrame(()=>{
+      c.style.transform = `translate(${Math.cos(angle)*dist}px, ${Math.sin(angle)*dist - 40}px) rotate(${Math.random()*360}deg)`;
+      c.style.opacity = 0;
+    });
+    setTimeout(()=>{ c.remove(); }, 1900);
+  }
+}
+function startPreviewConfetti(){ stopPreviewConfetti(); spawnPreviewConfetti(); previewConfettiInterval = setInterval(spawnPreviewConfetti, 1400 + Math.random()*1200); }
+function stopPreviewConfetti(){ if(previewConfettiInterval){ clearInterval(previewConfettiInterval); previewConfettiInterval=null; } document.querySelectorAll('.preview-confetti .confetti-piece').forEach(n=>n.remove()); }
+
+// start preview confetti while intro is visible
+startPreviewConfetti();
+
+// SOFT FLOATING HEARTS FOR INTRO
+let introHeartInterval;
+function spawnIntroHeart(){
+  const root = document.getElementById('intro');
+  if(!root) return;
+  const h = document.createElement('div'); h.className='intro-heart'; h.innerHTML='💕';
+  const left = 12 + Math.random()*76;
+  h.style.left = left + 'vw';
+  h.style.bottom = (8 + Math.random()*18) + 'vh';
+  h.style.fontSize = (14 + Math.random()*18) + 'px';
+  root.appendChild(h);
+  requestAnimationFrame(()=>{ h.style.transform = 'translateY(-24vh)'; h.style.opacity = 0; });
+  setTimeout(()=>{ h.remove(); }, 3200);
+}
+function startIntroHearts(){ stopIntroHearts(); spawnIntroHeart(); introHeartInterval = setInterval(spawnIntroHeart, 700 + Math.random()*800); }
+function stopIntroHearts(){ if(introHeartInterval){ clearInterval(introHeartInterval); introHeartInterval=null; } document.querySelectorAll('.intro-heart').forEach(n=>n.remove()); }
+// ensure hearts run while intro visible
+startIntroHearts();
+
+// bind specific clicks so name/title remain interactive
+const _env = document.querySelector('.envelope');
+if(_env){ _env.addEventListener('click', e=>{ e.stopPropagation(); startLove(); }); }
+const _previewBtn = document.querySelector('.preview-open');
+if(_previewBtn){ _previewBtn.addEventListener('click', e=>{ e.stopPropagation(); startLove(); }); }
 
 // FLOATING HEARTS
 function launchHearts(){
@@ -432,18 +702,24 @@ function selectTemplate(index){
 function showOutro(){
   document.getElementById('template-select').style.display='none';
   outro.style.display='block';
+  document.getElementById('outro-game').style.display='block';
   document.getElementById('outroText').innerText=templates[selectedTemplate].text;
   document.querySelector('#outro h2').innerText=templates[selectedTemplate].title;
-}function type(){
+}
+
+function type(){
  if(i<msg.length){ text.innerHTML+=msg[i]; i++; setTimeout(type,35); }
  else { launchHearts(); }
 }
 
 // START ANIMATION
 function startLove(){
+ stopIntroFlowers();
+ stopPreviewConfetti();
+ stopIntroHearts();
  intro.style.display='none';
  card.style.display='block';
- music.play();
+ if(music && music.play) music.play().catch(()=>{});
  type();
 }
 
@@ -455,21 +731,127 @@ function exitLove(){
 
 // GO BACK TO CARD
 function goBackToCard(){
- outro.style.display='none';
- document.getElementById('template-select').style.display='none';
- card.style.display='block';
+  outro.style.display='none';
+  stopOutroGame();
+  document.getElementById('template-select').style.display='none';
+  card.style.display='block';
 }
 
 // CONFIRM EXIT
 function confirmExit(){
  outro.style.display='none';
+  stopOutroGame();
  document.getElementById('template-select').style.display='none';
  intro.style.display='flex';
  music.pause();
  music.currentTime=0;
  text.innerHTML='';
  i=0;
+ startIntroFlowers();
+ startPreviewConfetti();
+ startIntroHearts();
 }
+
+// OUTRO GAME LOGIC: Catch Hearts
+let outroGameInterval, outroSpawnInterval, outroTimeLeft=20, outroScore=0;
+const gameScoreEl = () => document.getElementById('gameScore');
+const gameTimerEl = () => document.getElementById('gameTimer');
+const gamePlayfield = () => document.getElementById('gamePlayfield');
+function spawnOutroHeart(){
+  const field = gamePlayfield(); if(!field) return;
+  const h = document.createElement('div'); h.className='game-heart'; h.innerHTML='💖';
+  const x = Math.random()*(field.clientWidth-28);
+  const y = Math.random()*(field.clientHeight-28);
+  h.style.left = x+'px'; h.style.top = y+'px';
+  field.appendChild(h);
+  // float animation
+  requestAnimationFrame(()=>{ h.style.transform = 'translateY(-18px)'; });
+  const removeAfter = 3500 + Math.random()*1000;
+  const tid = setTimeout(()=>{ if(h.parentNode) h.remove(); clearTimeout(tid); }, removeAfter);
+  h.addEventListener('click', e=>{ outroScore+=1; updateOutroScore(); h.remove(); });
+}
+
+// BALLOON POP (alternative game for template 3)
+let balloonIntervals = [];
+function spawnBalloon(){
+  const field = gamePlayfield(); if(!field) return;
+  const b = document.createElement('div'); b.className='game-heart'; b.innerHTML='🎈';
+  const size = 18 + Math.random()*28;
+  const x = Math.random()*(field.clientWidth - size);
+  b.style.left = x+'px'; b.style.bottom = '-40px'; b.style.fontSize = size+'px'; b.style.top = (field.clientHeight + 40) + 'px';
+  field.appendChild(b);
+  // animate upward
+  requestAnimationFrame(()=>{ b.style.transition = 'transform 4000ms linear, opacity 4000ms'; b.style.transform = `translateY(-${field.clientHeight + 80}px)`; b.style.opacity = 0; });
+  const removeAfter = 4200;
+  const tid = setTimeout(()=>{ if(b.parentNode) b.remove(); clearTimeout(tid); }, removeAfter);
+  b.addEventListener('click', e=>{ outroScore+=2; updateOutroScore(); b.remove(); });
+}
+
+function startBalloonGame(){ stopOutroGame(); outroScore=0; outroTimeLeft=20; updateOutroScore(); updateOutroTimer(); document.getElementById('gameResult').style.display='none'; document.getElementById('startGameBtn').style.display='none'; document.getElementById('stopGameBtn').style.display='inline-block';
+  // spawn balloons periodically
+  const id = setInterval(spawnBalloon, 700);
+  balloonIntervals.push(id);
+  outroGameInterval = setInterval(()=>{ outroTimeLeft--; updateOutroTimer(); if(outroTimeLeft<=0) endOutroGame(); }, 1000);
+}
+
+function stopBalloonGame(){ balloonIntervals.forEach(id=>clearInterval(id)); balloonIntervals = []; const field=gamePlayfield(); if(field) field.innerHTML=''; document.getElementById('startGameBtn').style.display='inline-block'; document.getElementById('stopGameBtn').style.display='none'; if(outroGameInterval){ clearInterval(outroGameInterval); outroGameInterval=null; } }
+
+function updateOutroScore(){ const s = document.getElementById('gameScore'); if(s) s.innerText = outroScore; }
+function updateOutroTimer(){ const t = document.getElementById('gameTimer'); if(t) t.innerText = 'Time: ' + outroTimeLeft + 's'; }
+function startOutroGame(){ stopOutroGame(); outroScore=0; outroTimeLeft=20; updateOutroScore(); updateOutroTimer(); document.getElementById('gameResult').style.display='none'; document.getElementById('startGameBtn').style.display='none'; document.getElementById('stopGameBtn').style.display='inline-block';
+  // choose game based on selected template
+  if(selectedTemplate===3){ // playful -> balloon pop
+    startBalloonGame();
+    return;
+  }
+  outroSpawnInterval = setInterval(spawnOutroHeart, 600);
+  outroGameInterval = setInterval(()=>{ outroTimeLeft--; updateOutroTimer(); if(outroTimeLeft<=0) endOutroGame(); }, 1000);
+}
+let priceClaimProgress = 0;
+function priceClaimClick(){
+  priceClaimProgress += 20;
+  if(priceClaimProgress >= 100) priceClaimProgress = 100;
+  document.getElementById('priceClaimPercent').innerText = priceClaimProgress;
+  document.getElementById('priceClaimBar').style.width = priceClaimProgress + '%';
+  if(priceClaimProgress >= 100){
+    // Show revealed price box
+    document.getElementById('price-claim-game').style.display = 'none';
+    document.getElementById('price-claim-reveal').style.display = 'flex';
+  }
+}
+function stopOutroGame(){ try{ if(outroSpawnInterval){ clearInterval(outroSpawnInterval); outroSpawnInterval=null; } if(outroGameInterval){ clearInterval(outroGameInterval); outroGameInterval=null; } const field = gamePlayfield(); if(field) field.innerHTML=''; document.getElementById('startGameBtn').style.display='inline-block'; document.getElementById('stopGameBtn').style.display='none'; }catch(e){ console.error(e); }}
+function endOutroGame(){ stopOutroGame(); document.getElementById('finalScore').innerText = outroScore; document.getElementById('gameResult').style.display='flex'; document.getElementById('startGameBtn').style.display='inline-block'; document.getElementById('stopGameBtn').style.display='none'; 
+  // show price reveal page after game ends
+  setTimeout(()=>{ showPriceRevealPage(); }, 1000);
+}
+
+function showPriceRevealPage(){
+  priceClaimProgress = 0;
+  document.getElementById('priceClaimPercent').innerText = '0';
+  document.getElementById('priceClaimBar').style.width = '0%';
+  document.getElementById('price-claim-game').style.display = 'flex';
+  document.getElementById('price-claim-reveal').style.display = 'none';
+  const priceReveal = document.getElementById('price-reveal');
+  if(priceReveal){ priceReveal.classList.add('show'); }
+}
+
+function closePriceReveal(){
+  const priceReveal = document.getElementById('price-reveal');
+  if(priceReveal){ priceReveal.classList.remove('show'); }
+}
+
+// bind buttons
+document.addEventListener('click', function bindOutroGame(e){
+  if(document.getElementById('startGameBtn')){
+    document.getElementById('startGameBtn').addEventListener('click', ()=>{
+      // start appropriate game for selected template
+      if(selectedTemplate===3) startBalloonGame(); else startOutroGame();
+    });
+    document.getElementById('stopGameBtn').addEventListener('click', ()=>{ if(selectedTemplate===3) endOutroGame(); else endOutroGame(); });
+    document.getElementById('playAgainBtn').addEventListener('click', ()=>{ if(selectedTemplate===3) startBalloonGame(); else startOutroGame(); });
+  }
+  document.removeEventListener('click', bindOutroGame);
+});
 </script>
 </body>
 </html>
